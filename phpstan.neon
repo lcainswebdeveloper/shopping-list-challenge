@@ -1,0 +1,25 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: 8
+
+    paths:
+        - app/
+        - database/
+        - routes/
+
+    excludePaths:
+        - vendor/
+        - bootstrap/cache/
+        - storage/
+        - app/Http/Controllers/Auth/  # Breeze-generated, ignore for now
+
+    # Report unused ignores
+    reportUnmatchedIgnoredErrors: false
+
+    # Laravel-specific ignores
+    ignoreErrors:
+        # Config files use env() which can return bool|string
+        - '#Parameter .* expects string, bool\|string given#'
+        - '#Parameter .* expects string, string\|true given#'
