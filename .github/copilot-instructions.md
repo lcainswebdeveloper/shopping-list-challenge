@@ -193,12 +193,46 @@ backend/
 ./vendor/bin/sail artisan migrate
 ```
 
+## Commit Message Generation
+
+**Important:** When you request a commit message (e.g., "Generate commit message"), the workflow in `.github/commit-message-generator.md` **must** be followed. This file defines the required process, prompts, and formatting for commit messages, including:
+
+- Checking for staged changes
+- Analyzing the diff and change types
+- Using Conventional Commits format
+- Presenting the message and offering to commit
+
+**Do not use any other process for commit messages.**
+
+## Code Review Generation
+
+**Important:** When you request a code review (e.g., "Please code review this branch"), the workflow in `.github/reviews/laravel-codereview.md` **must** be followed. This file defines the required process, checks, scoring, and reporting for code reviews, including:
+
+- Pre-review validation (uncommitted changes, branch detection)
+- Automated checks (PHPStan, Pint, PHPUnit)
+- Git diff and file-by-file analysis
+- Scoring and severity classification
+- Report generation and saving
+
+**Do not use any other process for code reviews.**
+
+## PR Description Generation
+
+**Important:** When you request a PR description (e.g., "Generate PR description"), the workflow in `.github/pr-generator.md` **must** be followed. This file defines the required process, prompts, and formatting for PR descriptions, including:
+
+- Branch and diff analysis
+- Commit and file change categorization
+- PR type detection
+- Comprehensive PR description generation and saving
+
+**Do not use any other process for PR descriptions.**
+
 ## Agent Commands
 
 Say these phrases to invoke specialized agents:
 
 - **"Please code review this branch"** - Runs code review against main
-- **"Generate commit message"** - Creates conventional commit message
+- **"Generate commit message"** - Triggers the commit message workflow as defined in `.github/commit-message-generator.md`
 - **"Generate PR description"** - Creates comprehensive PR description
 
 ## Quality Gates
