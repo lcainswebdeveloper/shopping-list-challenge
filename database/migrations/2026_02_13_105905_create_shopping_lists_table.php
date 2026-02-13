@@ -15,10 +15,9 @@ return new class extends Migration
     {
         Schema::create('shopping_lists', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
             $table->timestamps();
-
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
         });
     }
 
