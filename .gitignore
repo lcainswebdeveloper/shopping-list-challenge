@@ -20,6 +20,7 @@
 /storage/pail
 /vendor
 /.github/reviews/*
+/pr-descriptions/*
 Homestead.json
 Homestead.yaml
 Thumbs.db

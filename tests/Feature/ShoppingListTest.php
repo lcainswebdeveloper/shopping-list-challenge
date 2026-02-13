@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class ShoppingListTest extends TestCase
 {
-    public function test_we_cannot_create_a_shopping_list_if_we_not_logged_in(): void
+    public function test_we_cannot_create_a_shopping_list_if_we_are_not_logged_in(): void
     {
         $response = $this->getJson('/api/shopping-list');
 
