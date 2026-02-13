@@ -38,7 +38,7 @@ class ShippingListTest extends TestCase
     {
         $user = User::factory()->create();
         $response = $this->actingAs($user)->postJson('/api/shopping-list');
-        $uuid = $response->json('id');
+        $uuid = $response->json('data.id');
         $this->assertTrue(Str::isUuid($uuid), "The ID [{$uuid}] is not a valid UUID.");
         $this->assertDatabaseHas('shopping_lists', [
             'user_id' => $user->id

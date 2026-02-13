@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ShoppingListResource;
 use App\Models\ShoppingList;
 use Illuminate\Http\Request;
 
@@ -10,34 +11,31 @@ class ShoppingListController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): void
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): ShoppingListResource
     {
+        $user = $request->user();
+        if (!$user) {
+            abort(401, 'No user found');
+        }
         $created = ShoppingList::create([
-            'user_id' => $request->user()->id
+            'user_id' => $user->id
         ]);
-        return response()->json($created, 201);
+        return new ShoppingListResource($created);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ShoppingList $shoppingList)
+    public function show(ShoppingList $shoppingList): void
     {
         //
     }
@@ -45,7 +43,7 @@ class ShoppingListController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ShoppingList $shoppingList)
+    public function edit(ShoppingList $shoppingList): void
     {
         //
     }
@@ -53,7 +51,7 @@ class ShoppingListController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ShoppingList $shoppingList)
+    public function update(Request $request, ShoppingList $shoppingList): void
     {
         //
     }
@@ -61,7 +59,7 @@ class ShoppingListController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ShoppingList $shoppingList)
+    public function destroy(ShoppingList $shoppingList): void
     {
         //
     }
