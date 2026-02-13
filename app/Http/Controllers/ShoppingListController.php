@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ShoppingListResource;
@@ -16,19 +18,19 @@ class ShoppingListController extends Controller
         //
     }
 
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request): ShoppingListResource
     {
         $user = $request->user();
-        if (!$user) {
+        if (! $user) {
             abort(401, 'No user found');
         }
         $created = ShoppingList::create([
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
+
         return new ShoppingListResource($created);
     }
 
