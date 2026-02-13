@@ -10,7 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-class ShippingListTest extends TestCase
+class ShoppingListTest extends TestCase
 {
     public function test_we_cannot_create_a_shopping_list_if_we_not_logged_in(): void
     {
