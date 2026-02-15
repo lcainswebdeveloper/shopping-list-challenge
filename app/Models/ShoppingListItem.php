@@ -1,24 +1,23 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
-class ShoppingList extends Model
+class ShoppingListItem extends Model
 {
     use HasUuids;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
-    protected $fillable = ['user_id'];
+    protected $fillable = ['grocery_slug', 'shopping_list_id', 'quantity', 'cost_in_pence'];
 
-    protected function items()
+    protected function list()
     {
-        return $this->hasMany(ShoppingListItem::class);
+        return $this->belongsTo(ShoppingList::class);
     }
 }
