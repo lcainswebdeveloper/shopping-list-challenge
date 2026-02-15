@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use App\Models\Grocery;
@@ -36,9 +38,9 @@ class ShoppingListRequest extends FormRequest
                     if (count($groceryKeys) !== $validGroceries) {
                         $fail("Sorry, you are trying to add groceries that don't exist");
                     }
-                }
+                },
             ],
-            'items.*' => ['required']
+            'items.*' => ['required'],
         ];
     }
 
@@ -49,6 +51,7 @@ class ShoppingListRequest extends FormRequest
         $validGroceries = Grocery::whereIn('slug', $groceryKeys)->get(['slug', 'price_in_units'])->keyBy('slug');
         $data = array_map(function ($quantity, $slug) use ($validGroceries, $shoppingList) {
             $groceryRecord = $validGroceries[$slug];
+
             return [
                 'quantity' => $quantity,
                 'cost_in_units' => $groceryRecord->price_in_units * $quantity,
@@ -61,15 +64,16 @@ class ShoppingListRequest extends FormRequest
             ['shopping_list_id', 'grocery_slug'],
             ['quantity', 'cost_in_units'],
         );
+
         return $saved;
     }
 
-    //This is to make sure that the validator has nice messages about the grocery item eg bread instead of items.bread
+    // This is to make sure that the validator has nice messages about the grocery item eg bread instead of items.bread
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
             foreach ($this->items ?? [] as $slug => $quantity) {
-                if (!is_int($quantity)) {
+                if (! is_int($quantity)) {
                     $validator->errors()->add(
                         "items.$slug",
                         "You have added $slug to your shopping list but it is not an integer."

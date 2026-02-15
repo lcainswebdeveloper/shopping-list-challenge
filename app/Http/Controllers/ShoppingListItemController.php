@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ShoppingListRequest;
@@ -20,6 +22,7 @@ class ShoppingListItemController extends Controller
     public function store(ShoppingListRequest $request, ShoppingList $shoppingList)
     {
         $request->upsert($shoppingList);
+
         return response()->json('Items added successfully to shopping list', 201);
     }
 

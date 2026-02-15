@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Models\Grocery;
 use App\Models\ShoppingList;
 use App\Models\ShoppingListItem;
 use App\Models\User;
 use Database\Seeders\GrocerySeeder;
-use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class ShoppingListItemTest extends TestCase
@@ -17,6 +15,7 @@ class ShoppingListItemTest extends TestCase
     protected User $user;
     protected string $baseUrl;
     protected ShoppingList $shoppingList;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -25,7 +24,7 @@ class ShoppingListItemTest extends TestCase
         $this->shoppingList = ShoppingList::create([
             'user_id' => $this->user->id,
         ]);
-        $this->baseUrl = '/api/shopping-list/' . $this->shoppingList->id . '/items';
+        $this->baseUrl = '/api/shopping-list/'.$this->shoppingList->id.'/items';
     }
 
     public function test_groceries_are_seeded(): void
@@ -57,14 +56,14 @@ class ShoppingListItemTest extends TestCase
 
     public function test_an_authenticated_user_must_provide_items_in_the_shopping_list_items_payload(): void
     {
-        //make sure we have items
+        // make sure we have items
         $payload = [];
         $response = $this->actingAs($this->user)->postJson($this->baseUrl, $payload);
         $response->assertStatus(422);
         $this->assertArrayHasKey('items', $response['errors']);
 
         $payload2 = [
-            'items' => []
+            'items' => [],
         ];
         $response2 = $this->actingAs($this->user)->postJson($this->baseUrl, $payload2);
         $response2->assertStatus(422);
@@ -76,7 +75,7 @@ class ShoppingListItemTest extends TestCase
         $nonExistantItem = [
             'items' => [
                 'i-dont-exist' => 6,
-            ]
+            ],
         ];
 
         $response2 = $this->actingAs($this->user)->postJson($this->baseUrl, $nonExistantItem);
@@ -86,23 +85,23 @@ class ShoppingListItemTest extends TestCase
         $payloadWithStringValue = [
             'items' => [
                 'milk' => 2,
-                'bread' => "I should be a number",
-                'eggs' => 3
-            ]
+                'bread' => 'I should be a number',
+                'eggs' => 3,
+            ],
         ];
         $response3 = $this->actingAs($this->user)->postJson($this->baseUrl, $payloadWithStringValue);
-        $this->assertEquals($response3['message'], "You have added bread to your shopping list but it is not an integer.");
+        $this->assertEquals($response3['message'], 'You have added bread to your shopping list but it is not an integer.');
         $response3->assertStatus(422);
 
         $payloadWithBooleanValue = [
             'items' => [
                 'milk' => 2,
                 'bread' => 3,
-                'eggs' => false
-            ]
+                'eggs' => false,
+            ],
         ];
         $response4 = $this->actingAs($this->user)->postJson($this->baseUrl, $payloadWithBooleanValue);
-        $this->assertEquals($response4['message'], "You have added eggs to your shopping list but it is not an integer.");
+        $this->assertEquals($response4['message'], 'You have added eggs to your shopping list but it is not an integer.');
         $response4->assertStatus(422);
     }
 
@@ -112,8 +111,8 @@ class ShoppingListItemTest extends TestCase
             'items' => [
                 'milk' => 2,
                 'bread' => 1,
-                'eggs' => 3
-            ]
+                'eggs' => 3,
+            ],
         ];
         $response = $this->actingAs($this->user)->postJson($this->baseUrl, $payload);
         $response->assertStatus(201);
@@ -121,7 +120,7 @@ class ShoppingListItemTest extends TestCase
             $this->assertDatabaseHas('shopping_list_items', [
                 'shopping_list_id' => $this->shoppingList->id,
                 'grocery_slug' => $item,
-                'quantity' => $quantity
+                'quantity' => $quantity,
             ]);
         }
 
@@ -130,8 +129,8 @@ class ShoppingListItemTest extends TestCase
                 'milk' => 6,
                 'bread' => 3,
                 'eggs' => 4,
-                'rice' => 2
-            ]
+                'rice' => 2,
+            ],
         ];
 
         $response = $this->actingAs($this->user)->postJson($this->baseUrl, $payloadUpdate);
@@ -142,7 +141,7 @@ class ShoppingListItemTest extends TestCase
             $this->assertDatabaseHas('shopping_list_items', [
                 'shopping_list_id' => $this->shoppingList->id,
                 'grocery_slug' => $item,
-                'quantity' => $quantity
+                'quantity' => $quantity,
             ]);
         }
     }
