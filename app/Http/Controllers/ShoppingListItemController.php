@@ -50,6 +50,7 @@ class ShoppingListItemController extends Controller
         $this->shoppingListItemService->upsert($shoppingList, $request->validated()['items']);
         // Reload items to get updated data
         $shoppingList->load('items');
+        $this->shoppingListItemService->updateSubtotal($shoppingList);
 
         return (new ShoppingListResource($shoppingList))
             ->response()
@@ -62,6 +63,8 @@ class ShoppingListItemController extends Controller
     public function destroy(ShoppingList $shoppingList, string $slug): Response
     {
         ShoppingListItem::where(['grocery_slug' => $slug, 'shopping_list_id' => $shoppingList->id])->delete();
+        $shoppingList->load('items');
+        $this->shoppingListItemService->updateSubtotal($shoppingList);
 
         return response()->noContent();
     }

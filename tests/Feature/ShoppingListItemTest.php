@@ -146,6 +146,14 @@ class ShoppingListItemTest extends TestCase
         $response = $this->actingAs($this->user)->postJson($this->baseUrl, $payload);
         $response->assertStatus(201);
 
+        // Assert subtotal_in_pence is correct after initial add
+        $expectedSubtotal = 0;
+        foreach ($payload['items'] as $slug => $qty) {
+            $expectedSubtotal += $this->groceryList[$slug] * $qty;
+        }
+        $this->shoppingList->refresh();
+        $this->assertEquals($expectedSubtotal, $this->shoppingList->subtotal_in_pence);
+
         foreach ($response['data']['items'] as $item) {
             $groceryItemUnitPrice = $this->groceryList[$item['grocery_slug']];
             $payloadItem = $payload['items'][$item['grocery_slug']];
@@ -181,6 +189,16 @@ class ShoppingListItemTest extends TestCase
         $updatedCount = ShoppingListItem::where('shopping_list_id', $this->shoppingList->id)->get();
         $this->assertCount(4, $updatedCount);
         $responseUpdate->assertStatus(201);
+
+        // Assert subtotal_in_pence is correct after update
+        $expectedSubtotalUpdate = 0;
+        foreach ($payloadUpdate['items'] as $slug => $qty) {
+            $unitPrice = $slug === 'milk' ? $originalMilkPrice : $this->groceryList[$slug];
+            $expectedSubtotalUpdate += $unitPrice * $qty;
+        }
+        $this->shoppingList->refresh();
+        $this->assertEquals($expectedSubtotalUpdate, $this->shoppingList->subtotal_in_pence);
+
         foreach ($responseUpdate['data']['items'] as $item) {
             $isMilk = $item['grocery_slug'] === 'milk';
             if ($isMilk) {
@@ -243,6 +261,11 @@ class ShoppingListItemTest extends TestCase
             'shopping_list_id' => $this->shoppingList->id,
             'grocery_slug' => 'milk',
         ]);
+
+        // Assert subtotal_in_pence is correct after deletion
+        $expectedSubtotalAfterDelete = $this->groceryList['bread'] * 1; // Only bread remains
+        $this->shoppingList->refresh();
+        $this->assertEquals($expectedSubtotalAfterDelete, $this->shoppingList->subtotal_in_pence);
     }
 
     public function test_authenticated_user_cannot_delete_shopping_list_item_that_wasnt_added(): void
