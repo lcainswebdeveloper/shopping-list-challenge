@@ -52,7 +52,7 @@ class ShoppingListItemService
         return ShoppingListItem::upsert(
             $data,
             ['shopping_list_id', 'grocery_slug'],
-            ['quantity', 'total_price_in_pence', 'unit_price_in_pence'],
+            ['quantity', 'total_price_in_pence'],
         );
     }
 }
