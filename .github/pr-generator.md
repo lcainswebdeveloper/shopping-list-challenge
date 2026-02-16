@@ -120,6 +120,7 @@ Parse commits to understand:
 Based on commits and file changes, organize into categories:
 
 **Project Context:**
+
 - **ShoppingItem** - Main shopping list item entity
 - **User** - Owner of shopping items (one-to-many relationship)
 
@@ -314,14 +315,14 @@ Examples:
 POST /api/shopping-items
 {
   "name": "Milk",
-  "price_in_pence": 150
+  "unit_price_in_pence": 150
 }
 
 // Example response
 {
   "id": 1,
   "name": "Milk",
-  "price_in_pence": 150,
+  "unit_price_in_pence": 150,
   "is_purchased": false,
   "sort_order": 0,
   "created_at": "2026-02-10T10:00:00Z"
@@ -340,7 +341,7 @@ Refs #[issue-number]
 - [ ] Type safety enforced (strict_types, all type hints)
 - [ ] Laravel idioms followed (Form Requests, Resources, Policies)
 - [ ] Security best practices applied (ownership validation)
-- [ ] Currency handled as integers (price_in_pence)
+- [ ] Currency handled as integers (unit_price_in_pence)
 - [ ] Tests are comprehensive and pass
 - [ ] Documentation is updated
 - [ ] No performance regressions

@@ -60,7 +60,7 @@ class StoreShoppingItemRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'price_in_pence' => ['required', 'integer', 'min:0'],
+            'unit_price_in_pence' => ['required', 'integer', 'min:0'],
         ];
     }
 }
@@ -73,7 +73,7 @@ class ShoppingItemResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'price_in_pence' => $this->price_in_pence,
+            'unit_price_in_pence' => $this->unit_price_in_pence,
         ];
     }
 }
@@ -92,7 +92,7 @@ class ShoppingListService
 {
     public function calculateTotal(User $user): int
     {
-        return $user->shoppingItems()->sum('price_in_pence');
+        return $user->shoppingItems()->sum('unit_price_in_pence');
     }
 }
 ```
@@ -103,10 +103,10 @@ class ShoppingListService
 
 ```php
 // ✅ Store as pence (integer)
-$table->unsignedInteger('price_in_pence')->default(0);
+$table->unsignedInteger('unit_price_in_pence')->default(0);
 
 // ✅ Calculate with integers
-$total = $items->sum('price_in_pence'); // Returns integer
+$total = $items->sum('unit_price_in_pence'); // Returns integer
 
 // ✅ Format for display only
 $formatted = number_format($total / 100, 2); // "12.50"
