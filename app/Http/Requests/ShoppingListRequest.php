@@ -8,6 +8,7 @@ use App\Models\Grocery;
 use App\Models\ShoppingList;
 use App\Models\ShoppingListItem;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class ShoppingListRequest extends FormRequest
 {
@@ -54,7 +55,7 @@ class ShoppingListRequest extends FormRequest
 
             return [
                 'quantity' => $quantity,
-                'cost_in_units' => $groceryRecord->price_in_units * $quantity,
+                'cost_in_units' => ($groceryRecord->price_in_units ?? 0) * $quantity,
                 'grocery_slug' => $slug,
                 'shopping_list_id' => $shoppingList->id,
             ];
@@ -69,7 +70,7 @@ class ShoppingListRequest extends FormRequest
     }
 
     // This is to make sure that the validator has nice messages about the grocery item eg bread instead of items.bread
-    public function withValidator($validator)
+    public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
             foreach ($this->items ?? [] as $slug => $quantity) {

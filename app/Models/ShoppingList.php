@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ShoppingList extends Model
 {
@@ -17,7 +18,10 @@ class ShoppingList extends Model
      */
     protected $fillable = ['user_id'];
 
-    protected function items()
+    /**
+     * @return HasMany<ShoppingListItem, $this>
+     */
+    protected function items(): HasMany
     {
         return $this->hasMany(ShoppingListItem::class);
     }
