@@ -11,7 +11,8 @@ use App\Models\ShoppingListItem;
 class ShoppingListItemService
 {
     /**
-     * Undocumented function
+     * Takes the array of shopping list items and will add them to the shopping list on an upsert
+     * basis
      *
      * @param  array<string, int>  $items
      */
