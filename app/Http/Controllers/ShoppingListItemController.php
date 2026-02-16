@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ShoppingListRequest;
+use App\Http\Resources\GroceryWithSelectionResource;
 use App\Http\Resources\ShoppingListResource;
+use App\Models\Grocery;
 use App\Models\ShoppingList;
+use App\Models\ShoppingListItem;
 use App\Services\ShoppingListItemService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ShoppingListItemController extends Controller
 {
@@ -20,12 +24,22 @@ class ShoppingListItemController extends Controller
      */
     public function index(Request $request, ShoppingList $shoppingList): JsonResponse
     {
-        // Reload items to get updated data
-        $shoppingList->load('items');
+        $groceries = Grocery::orderBy('slug')->get();
+        $selectedItems = $shoppingList->items->keyBy('grocery_slug');
 
-        return (new ShoppingListResource($shoppingList))
-            ->response()
-            ->setStatusCode(200);
+        $groceriesWithSelection = $groceries->map(
+            fn(Grocery $grocery) => new GroceryWithSelectionResource(
+                $grocery,
+                $selectedItems->get($grocery->slug)
+            )
+        );
+
+        return response()->json([
+            'data' => [
+                'shopping_list' => (new ShoppingListResource($shoppingList))->resolve(),
+                'groceries' => $groceriesWithSelection->map->resolve(),
+            ],
+        ], 200);
     }
 
     /**
@@ -40,5 +54,15 @@ class ShoppingListItemController extends Controller
         return (new ShoppingListResource($shoppingList))
             ->response()
             ->setStatusCode(201);
+    }
+
+    /**
+     * Remove the item from the shopping list.
+     */
+    public function destroy(ShoppingList $shoppingList, string $slug): Response
+    {
+        ShoppingListItem::where(['grocery_slug' => $slug, 'shopping_list_id' => $shoppingList->id])->delete();
+
+        return response()->noContent();
     }
 }

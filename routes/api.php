@@ -16,5 +16,7 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
     Route::middleware(['owns.shopping.list'])->group(function (): void {
         Route::resource('shopping-list.items', ShoppingListItemController::class)
             ->only(['index', 'store']);
+
+        Route::delete('/shopping-list/{shopping_list}/items/{slug}', [ShoppingListItemController::class, 'destroy']);
     });
 });

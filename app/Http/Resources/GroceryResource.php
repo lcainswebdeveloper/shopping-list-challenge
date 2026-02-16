@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Models\ShoppingListItem
+ * @mixin \App\Models\Grocery
  */
-class ShoppingListItemResource extends JsonResource
+class GroceryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -24,16 +24,11 @@ class ShoppingListItemResource extends JsonResource
         $formatter = app(MoneyFormatInterface::class);
 
         return [
-            'id' => $this->id,
-            'shopping_list_id' => $this->shopping_list_id,
-            'grocery_slug' => $this->grocery_slug,
-            'quantity' => $this->quantity,
+            'slug' => $this->slug,
+            'name' => $this->name,
             'unit_price_in_pence' => $this->unit_price_in_pence,
-            'total_price_in_pence' => $this->total_price_in_pence,
-            'formatted_price' => $formatter->format($this->total_price_in_pence),
+            'formatted_price' => $formatter->format($this->unit_price_in_pence),
             'currency' => $formatter->getCurrencyCode(),
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
         ];
     }
 }
