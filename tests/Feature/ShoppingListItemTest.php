@@ -30,7 +30,7 @@ class ShoppingListItemTest extends TestCase
         $this->shoppingList = ShoppingList::create([
             'user_id' => $this->user->id,
         ]);
-        $this->baseUrl = '/api/shopping-list/' . $this->shoppingList->id . '/items';
+        $this->baseUrl = '/api/shopping-list/'.$this->shoppingList->id.'/items';
     }
 
     public function test_groceries_are_seeded(): void
