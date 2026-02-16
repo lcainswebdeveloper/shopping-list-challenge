@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Models\ShoppingList
+ * @mixin \App\Models\ShoppingListItem
  */
-class ShoppingListResource extends JsonResource
+class ShoppingListItemResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,7 +21,11 @@ class ShoppingListResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'items' => ShoppingListItemResource::collection($this->whenLoaded('items')),
+            'grocery_slug' => $this->grocery_slug,
+            'quantity' => $this->quantity,
+            'unit_price_in_pence' => $this->unit_price_in_pence,
+            'total_price_in_pence' => $this->total_price_in_pence,
+            'created_at' => $this->created_at?->toISOString(),
         ];
     }
 }

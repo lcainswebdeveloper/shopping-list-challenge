@@ -17,12 +17,18 @@ class ShoppingListItem extends Model
      *
      * @var list<string>
      */
-    protected $fillable = ['grocery_slug', 'shopping_list_id', 'quantity', 'cost_in_pence'];
+    protected $fillable = ['grocery_slug', 'shopping_list_id', 'quantity', 'unit_price_in_pence', 'total_price_in_pence'];
+
+    protected $casts = [
+        'quantity' => 'integer',
+        'unit_price_in_pence' => 'integer',
+        'total_price_in_pence' => 'integer',
+    ];
 
     /**
      * @return BelongsTo<ShoppingList, $this>
      */
-    protected function list(): BelongsTo
+    public function list(): BelongsTo
     {
         return $this->belongsTo(ShoppingList::class);
     }

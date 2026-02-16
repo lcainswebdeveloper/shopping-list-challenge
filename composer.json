@@ -61,7 +61,7 @@
             "./vendor/bin/pint"
         ],
         "lint": [
-            "./vendor/bin/pint --test"
+            "./vendor/bin/pint --test -v"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

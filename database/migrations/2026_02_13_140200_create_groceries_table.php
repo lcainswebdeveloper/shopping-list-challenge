@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('groceries', function (Blueprint $table) {
             $table->string('slug')->primary();
             $table->string('name');
-            $table->unsignedInteger('price_in_units')->default(0);
+            $table->unsignedInteger('unit_price_in_pence')->default(0);
             $table->timestamps();
         });
     }

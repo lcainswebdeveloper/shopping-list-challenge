@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('shopping_list_items', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->unsignedInteger('quantity')->default(0);
-            $table->unsignedInteger('cost_in_units')->default(0);
+            $table->unsignedInteger('unit_price_in_pence')->default(0);
+            $table->unsignedInteger('total_price_in_pence')->default(0);
             $table->string('grocery_slug');
             $table->uuid('shopping_list_id');
             $table->foreign('grocery_slug')->references('slug')->on('groceries')->restrictOnDelete();

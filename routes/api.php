@@ -13,5 +13,7 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
     Route::get('/shopping-list', [ShoppingListController::class, 'index']);
     Route::post('/shopping-list', [ShoppingListController::class, 'store']);
 
-    Route::resource('shopping-list.items', ShoppingListItemController::class);
+    Route::middleware(['owns.shopping.list'])->group(function (): void {
+        Route::resource('shopping-list.items', ShoppingListItemController::class);
+    });
 });

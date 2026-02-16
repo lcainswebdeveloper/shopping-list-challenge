@@ -21,7 +21,7 @@ class ShoppingList extends Model
     /**
      * @return HasMany<ShoppingListItem, $this>
      */
-    protected function items(): HasMany
+    public function items(): HasMany
     {
         return $this->hasMany(ShoppingListItem::class);
     }

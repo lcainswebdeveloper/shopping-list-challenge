@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use App\Models\Grocery;
-use App\Models\ShoppingList;
-use App\Models\ShoppingListItem;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -17,7 +15,7 @@ class ShoppingListRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // todo - add logic to make sure the list belongs to the user
+        // UserMustOwnShoppingList middleware is in place to make sure the owner of the shopping list is correct.
         return true;
     }
 
@@ -33,7 +31,7 @@ class ShoppingListRequest extends FormRequest
                 'required',
                 'array',
                 'min:1',
-                function ($attr, $val, $fail) {
+                function (string $attr, mixed $val, \Closure $fail) {
                     $groceryKeys = array_keys($val);
                     $validGroceries = Grocery::whereIn('slug', $groceryKeys)->count();
                     if (count($groceryKeys) !== $validGroceries) {
@@ -43,30 +41,6 @@ class ShoppingListRequest extends FormRequest
             ],
             'items.*' => ['required'],
         ];
-    }
-
-    public function upsert(ShoppingList $shoppingList): int
-    {
-        $items = $this->items;
-        $groceryKeys = array_keys($items);
-        $validGroceries = Grocery::whereIn('slug', $groceryKeys)->get(['slug', 'price_in_units'])->keyBy('slug');
-        $data = array_map(function ($quantity, $slug) use ($validGroceries, $shoppingList) {
-            $groceryRecord = $validGroceries[$slug];
-
-            return [
-                'quantity' => $quantity,
-                'cost_in_units' => ($groceryRecord->price_in_units ?? 0) * $quantity,
-                'grocery_slug' => $slug,
-                'shopping_list_id' => $shoppingList->id,
-            ];
-        }, $items, $groceryKeys);
-        $saved = ShoppingListItem::upsert(
-            $data,
-            ['shopping_list_id', 'grocery_slug'],
-            ['quantity', 'cost_in_units'],
-        );
-
-        return $saved;
     }
 
     // This is to make sure that the validator has nice messages about the grocery item eg bread instead of items.bread
