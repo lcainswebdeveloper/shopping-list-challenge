@@ -67,7 +67,7 @@ class ShoppingListItemTest extends TestCase
         $response->assertStatus(401);
     }
 
-    public function test_another_user_cannot_add_items_to_our_shopping_list()
+    public function test_another_user_cannot_add_items_to_our_shopping_list(): void
     {
         $user = User::factory()->create();
         $payload = [
@@ -134,7 +134,7 @@ class ShoppingListItemTest extends TestCase
         $response4->assertStatus(422);
     }
 
-    public function test_an_authenticated_user_can_create_a_shopping_list(): void
+    public function test_an_authenticated_user_can_add_and_update_shopping_list_items_with_immutable_pricing(): void
     {
         $payload = [
             'items' => [

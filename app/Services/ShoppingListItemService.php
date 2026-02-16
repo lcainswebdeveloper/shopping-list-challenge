@@ -12,9 +12,10 @@ class ShoppingListItemService
 {
     /**
      * Takes the array of shopping list items and will add them to the shopping list on an upsert
-     * basis
+     * basis.
      *
-     * @param  array<string, int>  $items
+     * @param  array<string, int>  $items  Associative array of grocery slugs to quantities.
+     * @return int Number of affected rows from the upsert operation.
      */
     public function upsert(ShoppingList $shoppingList, array $items): int
     {
