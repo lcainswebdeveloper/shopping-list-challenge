@@ -41,36 +41,4 @@ class ShoppingListController extends Controller
 
         return new ShoppingListResource($created);
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(ShoppingList $shoppingList): void
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ShoppingList $shoppingList): void
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ShoppingList $shoppingList): void
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ShoppingList $shoppingList): void
-    {
-        //
-    }
 }

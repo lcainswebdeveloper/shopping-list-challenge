@@ -1,59 +1,99 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+---
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Mayden Shopping List API
 
-## About Laravel
+A modern Laravel 12 REST API for managing shopping lists, demonstrating senior-level PHP and Laravel skills.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
+- User authentication (Laravel Sanctum)
+- Shopping list CRUD with ownership validation
+- Add, update, and delete shopping list items (with immutable pricing)
+- View all groceries with selection status
+- Currency formatting using SOLID principles (GBP default)
+- Subtotal calculation and storage on shopping lists
+- Comprehensive feature tests and static analysis (PHPStan Level 8)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Getting Started
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Prerequisites
+- Docker & Docker Compose
+- Composer
 
-## Learning Laravel
+### Setup
+1. **Clone the repository:**
+   ```bash
+   git clone <repo-url>
+   cd backend
+   ```
+2. **Install dependencies:**
+   ```bash
+   composer install (using local composer - or run using a composer docker container)
+   ```
+3. **Copy .env and generate key:**
+   ```bash
+   cp .env.example .env
+   ./vendor/bin/sail artisan key:generate
+   ```
+4. **Start containers:**
+   ```bash
+   ./vendor/bin/sail up -d
+   ```
+5. **Run migrations and seeders:**
+   ```bash
+   ./vendor/bin/sail artisan migrate --seed
+   ```
+6. **Run tests:**
+   ```bash
+   ./vendor/bin/sail composer test
+   ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Static Analysis & Formatting
+- **PHPStan (Level 8):**
+  ```bash
+  ./vendor/bin/sail composer analyse
+  ```
+- **Pint (PSR-12):**
+  ```bash
+  ./vendor/bin/sail composer format
+  ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## API Overview
 
-## Laravel Sponsors
+- **Authentication:** Laravel Sanctum (token-based)
+- **Base URL:** `/api`
+- **Key Endpoints:**
+  - `POST /api/login` — Authenticate user
+  - `GET /api/shopping-list` — List all shopping lists
+  - `POST /api/shopping-list` — Create a new shopping list
+  - `GET /api/shopping-list/{shopping_list}/items` — View groceries with selection status
+  - `POST /api/shopping-list/{shopping_list}/items` — Add/update items
+  - `DELETE /api/shopping-list/{shopping_list}/items/{slug}` — Remove item by grocery slug
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Project Structure
+- `app/Http/Controllers` — Thin controllers
+- `app/Http/Requests` — Form Requests for validation
+- `app/Http/Resources` — API Resources for JSON
+- `app/Models` — Eloquent models
+- `app/Services` — Business logic (e.g., ShoppingListItemService)
+- `app/Contracts` — Money formatting interface
+- `database/migrations` — Database schema
+- `database/seeders` — Seed data (20 groceries)
+- `tests/Feature` — Feature tests
 
-### Premium Partners
+## Quality Gates
+- PHPStan Level 8 passes (`composer analyse`)
+- Pint passes (`composer format`)
+- All tests pass (`composer test`)
+- Ownership validation implemented
+- Currency handled as integers
+- Form Requests used for validation
+- API Resources used for responses
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Review Notes
+- All business logic is in services, not controllers
+- Ownership and security enforced at all layers
+- Money formatting is SOLID and extensible
+- Subtotal is stored and tested for accuracy
+- Feature tests cover all critical flows (add, update, delete, subtotal)
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
