@@ -13,6 +13,8 @@ class ShoppingListItemSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        // This seeder is intentionally left empty. Shopping list items are
+        // created dynamically via application logic and tests rather than
+        // being seeded as static fixtures.
     }
 }
