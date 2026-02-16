@@ -22,6 +22,7 @@ class ShoppingListResource extends JsonResource
         return [
             'id' => $this->id,
             'items' => ShoppingListItemResource::collection($this->whenLoaded('items')),
+            'created_at' => $this->created_at?->toISOString(),
         ];
     }
 }
