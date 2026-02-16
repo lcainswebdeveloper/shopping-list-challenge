@@ -55,4 +55,11 @@ class ShoppingListItemService
             ['quantity', 'total_price_in_pence'],
         );
     }
+
+    public function updateSubtotal(ShoppingList $shoppingList): void
+    {
+        $subtotal = (int) $shoppingList->items()->sum('total_price_in_pence');
+        $shoppingList->subtotal_in_pence = max(0, $subtotal); // ensure this shouldn't be negative
+        $shoppingList->save();
+    }
 }
