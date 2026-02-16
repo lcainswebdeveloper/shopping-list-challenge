@@ -16,7 +16,11 @@ class ShoppingListItemController extends Controller
     public function __construct(private readonly ShoppingListItemService $shoppingListItemService) {}
 
     /**
-     * Display a listing of the resource.
+     * Get the current shopping list for the customer with the items 
+     *
+     * @param Request $request
+     * @param ShoppingList $shoppingList
+     * @return JsonResponse
      */
     public function index(Request $request, ShoppingList $shoppingList): JsonResponse
     {
@@ -29,7 +33,11 @@ class ShoppingListItemController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create / update the shopping list items
+     *
+     * @param ShoppingListRequest $request
+     * @param ShoppingList $shoppingList
+     * @return JsonResponse
      */
     public function store(ShoppingListRequest $request, ShoppingList $shoppingList): JsonResponse
     {

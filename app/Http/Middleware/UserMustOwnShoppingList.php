@@ -25,6 +25,10 @@ class UserMustOwnShoppingList
                     'message' => 'Sorry you are not the owner of this shopping list.',
                 ], 403);
             }
+        } else {
+            return response()->json([
+                'message' => 'Shopping List not found.',
+            ], 404);
         }
 
         return $next($request);

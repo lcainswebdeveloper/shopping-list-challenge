@@ -30,7 +30,7 @@ class ShoppingListItemTest extends TestCase
         $this->shoppingList = ShoppingList::create([
             'user_id' => $this->user->id,
         ]);
-        $this->baseUrl = '/api/shopping-list/'.$this->shoppingList->id.'/items';
+        $this->baseUrl = '/api/shopping-list/' . $this->shoppingList->id . '/items';
     }
 
     public function test_groceries_are_seeded(): void
@@ -101,13 +101,13 @@ class ShoppingListItemTest extends TestCase
 
     public function test_an_authenticated_user_will_fail_validation_for_shopping_list_items(): void
     {
-        $nonExistantItem = [
+        $nonExistentItem = [
             'items' => [
                 'i-dont-exist' => 6,
             ],
         ];
 
-        $response2 = $this->actingAs($this->user)->postJson($this->baseUrl, $nonExistantItem);
+        $response2 = $this->actingAs($this->user)->postJson($this->baseUrl, $nonExistentItem);
         $this->assertEquals($response2['message'], "Sorry, you are trying to add groceries that don't exist");
         $response2->assertStatus(422);
 

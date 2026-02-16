@@ -28,7 +28,7 @@ class ShoppingListItem extends Model
     /**
      * @return BelongsTo<ShoppingList, $this>
      */
-    public function list(): BelongsTo
+    public function shoppingList(): BelongsTo
     {
         return $this->belongsTo(ShoppingList::class);
     }

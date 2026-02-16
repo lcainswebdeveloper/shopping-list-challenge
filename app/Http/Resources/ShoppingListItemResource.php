@@ -21,11 +21,13 @@ class ShoppingListItemResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'shopping_list_id' => $this->shopping_list_id,
             'grocery_slug' => $this->grocery_slug,
             'quantity' => $this->quantity,
             'unit_price_in_pence' => $this->unit_price_in_pence,
             'total_price_in_pence' => $this->total_price_in_pence,
             'created_at' => $this->created_at?->toISOString(),
+            'updated_at' => $this->updated_at?->toISOString(),
         ];
     }
 }
