@@ -14,6 +14,7 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
     Route::post('/shopping-list', [ShoppingListController::class, 'store']);
 
     Route::middleware(['owns.shopping.list'])->group(function (): void {
-        Route::resource('shopping-list.items', ShoppingListItemController::class);
+        Route::resource('shopping-list.items', ShoppingListItemController::class)
+            ->only(['index', 'store']);
     });
 });
