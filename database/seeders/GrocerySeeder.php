@@ -38,7 +38,7 @@ class GrocerySeeder extends Seeder
         ];
 
         foreach ($groceries as $grocery) {
-            DB::table('groceries')->insert($grocery);
+            DB::table('groceries')->insertOrIgnore($grocery);
         }
     }
 }
