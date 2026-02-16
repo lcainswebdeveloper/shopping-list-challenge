@@ -67,7 +67,7 @@ class ShoppingListItemTest extends TestCase
         $response->assertStatus(401);
     }
 
-    public function test_another_user_cannot_add_items_to_our_shopping_list()
+    public function test_another_user_cannot_add_items_to_our_shopping_list(): void
     {
         $user = User::factory()->create();
         $payload = [
