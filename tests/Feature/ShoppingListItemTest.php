@@ -215,4 +215,93 @@ class ShoppingListItemTest extends TestCase
             }
         }
     }
+
+    public function test_authenticated_user_can_delete_shopping_list_item(): void
+    {
+        // Add an item to the shopping list
+        $payload = [
+            'items' => [
+                'milk' => 2,
+                'bread' => 1,
+            ],
+        ];
+        $this->actingAs($this->user)->postJson($this->baseUrl, $payload);
+
+        // Confirm item exists
+        $this->assertDatabaseHas('shopping_list_items', [
+            'shopping_list_id' => $this->shoppingList->id,
+            'grocery_slug' => 'milk',
+        ]);
+
+        // Delete the item by slug
+        $deleteUrl = $this->baseUrl.'/milk';
+        $response = $this->actingAs($this->user)->deleteJson($deleteUrl);
+        $response->assertStatus(204);
+
+        // Confirm item is deleted
+        $this->assertDatabaseMissing('shopping_list_items', [
+            'shopping_list_id' => $this->shoppingList->id,
+            'grocery_slug' => 'milk',
+        ]);
+    }
+
+    public function test_authenticated_user_cannot_delete_shopping_list_item_that_wasnt_added(): void
+    {
+        // Add an item to the shopping list
+        $payload = [
+            'items' => [
+                'milk' => 2,
+                'bread' => 1,
+            ],
+        ];
+        $this->actingAs($this->user)->postJson($this->baseUrl, $payload);
+
+        // Delete the item by slug
+        $deleteUrl = $this->baseUrl.'/eggs';
+        $response = $this->actingAs($this->user)->deleteJson($deleteUrl);
+        $response->assertStatus(204);
+
+        // Confirm item is deleted
+        $this->assertDatabaseMissing('shopping_list_items', [
+            'shopping_list_id' => $this->shoppingList->id,
+            'grocery_slug' => 'eggs',
+        ]);
+    }
+
+    public function test_guest_cannot_delete_shopping_list_item(): void
+    {
+        ShoppingListItem::create([
+            'grocery_slug' => 'eggs',
+            'shopping_list_id' => $this->shoppingList->id,
+            'user_id' => 1,
+        ]);
+
+        $deleteUrl = $this->baseUrl.'/eggs';
+        $response = $this->deleteJson($deleteUrl);
+        $response->assertStatus(401);
+        $this->assertDatabaseHas('shopping_list_items', [
+            'shopping_list_id' => $this->shoppingList->id,
+            'grocery_slug' => 'eggs',
+        ]);
+    }
+
+    public function test_user_cannot_delete_item_from_another_users_shopping_list(): void
+    {
+        // Add an item to the shopping list
+        $payload = [
+            'items' => [
+                'rice' => 1,
+            ],
+        ];
+        $this->actingAs($this->user)->postJson($this->baseUrl, $payload);
+
+        $otherUser = User::factory()->create();
+        $deleteUrl = $this->baseUrl.'/rice';
+        $response = $this->actingAs($otherUser)->deleteJson($deleteUrl);
+        $response->assertStatus(403);
+        $this->assertDatabaseHas('shopping_list_items', [
+            'shopping_list_id' => $this->shoppingList->id,
+            'grocery_slug' => 'rice',
+        ]);
+    }
 }
