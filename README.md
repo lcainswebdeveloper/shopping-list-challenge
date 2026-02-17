@@ -1,5 +1,3 @@
----
-
 # Mayden Shopping List API
 
 A modern Laravel 12 REST API for managing shopping lists, demonstrating senior-level PHP and Laravel skills.
@@ -23,7 +21,7 @@ A modern Laravel 12 REST API for managing shopping lists, demonstrating senior-l
 1. **Clone the repository:**
    ```bash
    git clone <repo-url>
-   cd backend
+   cd into repo
    ```
 2. **Install dependencies:**
    ```bash
@@ -95,5 +93,3 @@ A modern Laravel 12 REST API for managing shopping lists, demonstrating senior-l
 - Money formatting is SOLID and extensible
 - Subtotal is stored and tested for accuracy
 - Feature tests cover all critical flows (add, update, delete, subtotal)
-
----
